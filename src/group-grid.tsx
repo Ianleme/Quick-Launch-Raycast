@@ -11,7 +11,7 @@ function normalizeTarget(target: string): string {
   return `https://${target}`;
 }
 
-export function GroupGrid(props: { groupId: string; title: string }) {
+export function GroupGrid(props: { groupId: string; title: string; emptyMessage?: string }) {
   const [groups, setGroups] = useState<AppGroup[]>([]);
   const [iconMap, setIconMap] = useState<Record<string, string | undefined>>({});
 
@@ -44,7 +44,15 @@ export function GroupGrid(props: { groupId: string; title: string }) {
   const group = useMemo(() => groups.find((item) => item.id === props.groupId) ?? null, [groups, props.groupId]);
 
   if (!group) {
-    return <Grid navigationTitle={props.title} searchBarPlaceholder="Loading group..." />;
+    return (
+      <Grid navigationTitle={props.title} searchBarPlaceholder="Search apps">
+        <Grid.EmptyView
+          title={props.title}
+          description={props.emptyMessage ?? "This group is not available anymore. Check the command preferences or recreate it in Launch Manager."}
+          icon={Icon.ExclamationMark}
+        />
+      </Grid>
+    );
   }
 
   return (

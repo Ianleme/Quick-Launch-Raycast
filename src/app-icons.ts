@@ -1,8 +1,10 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { execFile } from "node:child_process";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { promisify } from "node:util";
 
-import { runPowerShellScript } from "@raycast/utils";
+const execFileAsync = promisify(execFile);
 
 function extractPlistValue(plist: string, key: string): string | undefined {
   const match = plist.match(new RegExp(`<key>${key}</key>\\s*<string>([^<]+)</string>`));
@@ -30,7 +32,7 @@ function toImageSource(source: string): string {
 
 async function resolveWindowsAppIcon(target: string): Promise<string | undefined> {
   const script = `
-param([string]$Target)
+  $Target = $args[0]
 if (-not (Test-Path -LiteralPath $Target)) { exit 0 }
 
 Add-Type -AssemblyName System.Drawing | Out-Null
@@ -55,10 +57,12 @@ Write-Output $tempFile
 `;
 
   try {
-    const output = await runPowerShellScript(script, {
-      parseOutput: ({ stdout }) => stdout.trim(),
+    const { stdout } = await execFileAsync("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", script, target], {
       timeout: 10000,
+      windowsHide: true,
+      maxBuffer: 1024 * 1024,
     });
+    const output = String(stdout).trim();
     return output.length > 0 ? toImageSource(output) : undefined;
   } catch {
     return undefined;

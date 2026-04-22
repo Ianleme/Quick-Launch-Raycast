@@ -9,6 +9,7 @@ Quick Launch is a Raycast extension for organizing websites, desktop apps, and l
 - Set custom icons per group or app
 - Automatically use app icons when possible on macOS and Windows
 - Open everything from a single Raycast command
+- Map your most-used groups to native Raycast hotkeys
 
 ## Example Use Case
 
@@ -29,9 +30,15 @@ This makes Quick Launch a practical manager for browser-based AI tools you alrea
 3. Add apps to that group.
 4. Use a `Target` such as:
    - `https://chat.openai.com`
-   - `/Applications/Slack.app`
-   - `C:\Program Files\Notion\Notion.exe`
-   - `C:\Users\Ian\Desktop\My Shortcut.lnk`
+    - `/Applications/Slack.app`
+    - `C:\Program Files\Notion\Notion.exe`
+    - `C:\Users\Ian\Desktop\My Shortcut.lnk`
+
+## Hotkeys
+
+- Use `Open Group Slot 1` through `Open Group Slot 5` for native Raycast hotkeys.
+- In each slot command preferences, set `Group Name` to the exact saved group name.
+- Then assign a Raycast hotkey to that command in Raycast settings.
 
 ## Icons
 
